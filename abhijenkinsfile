@@ -11,12 +11,12 @@ stage ('checkoutcode'){
 stage ('build'){
        sh "${mavenHome}/bin/mvn clean package"
 }
-
+/*
 stage('ExecuteSonarQubeReport'){
       sh "${mavenHome}/bin/mvn sonar:sonar"
 }
 stage('UploadArtifactIntoNexusRepo'){
      sh "${mavenHome}/bin/mvn deploy"
 }
-
+*/
 }
