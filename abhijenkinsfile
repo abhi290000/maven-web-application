@@ -1,0 +1,22 @@
+node  {
+    
+    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '5', numToKeepStr: '5')), [$class: 'JobLocalConfiguration', changeReasonComment: ''], pipelineTriggers([pollSCM('* * * * *')])])
+    
+    def mavenHome = tool name: "maven3.8.6"
+//getting code from github repo    
+stage ('checkoutcode'){
+        git credentialsId: '19e5fa86-89dc-4ab2-a8e9-818aac527371', url: 'https://github.com/abhi290000/maven-web-application.git'
+}
+// using maven doing build
+stage ('build'){
+       sh "${mavenHome}/bin/mvn clean package"
+}
+
+stage('ExecuteSonarQubeReport'){
+      sh "${mavenHome}/bin/mvn sonar:sonar"
+}
+stage('UploadArtifactIntoNexusRepo'){
+     sh "${mavenHome}/bin/mvn deploy"
+}
+
+}
